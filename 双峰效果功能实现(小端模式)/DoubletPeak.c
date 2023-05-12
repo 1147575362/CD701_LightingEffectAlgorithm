@@ -25,7 +25,7 @@ uint8_t DoubletPeak(uint8_t data[], uint8_t size, uint8_t times)
 	{
 		// 控制A峰
 		if (i < 21)
-			data[i / 8] |= 0x80 >> (i % 8);
+			data[i / 8] |= 0x01 << (i % 8);
 		if ((i - 5) >= 0 && (i - 5) <= 23)
 			data[(i - 5) / 8] &= ~(0x01 << ((i - 5) % 8));
 
