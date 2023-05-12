@@ -1,5 +1,6 @@
 #include "DoubletPeak.h"
 
+// 改了没有？
 // 仅用于调试 输出二进制 只能输出char类型 其他类型要修改
 void printf2(char n)
 {
