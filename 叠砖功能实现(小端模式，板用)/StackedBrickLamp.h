@@ -39,6 +39,6 @@ void printf2(char n);
 		bits_lens:以多长的bit串为单位移动
         Act:High为高电平有效，low为低电平有效
 */
-uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times, uint8_t bits_lens, uint8_t Act);
+uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint16_t times, uint8_t bits_lens, uint8_t Act);
 
 #endif

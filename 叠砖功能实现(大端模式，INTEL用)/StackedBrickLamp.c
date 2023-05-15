@@ -6,13 +6,14 @@ void printf2(char n)
 	uint8_t i = 0;
 	for (i = 0; i < 8; i++)
 		if (n & (0x80 >> i))
-			printf("1");
+			// printf("1");
+			printf("\033[41m1\033[0m");
 		else
 			printf("0");
 	printf("");
 }
 
-uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times, uint8_t bits_lens, uint8_t Act)
+uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint16_t times, uint8_t bits_lens, uint8_t Act)
 {
 	if (data == NULL)
 		return 0;
@@ -25,7 +26,7 @@ uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t
 	{
 		if (Act == High)
 		{
-			for (uint8_t i = 1, j = led_nums; i <= times; i++, j--) // i控制次数， j控制位置
+			for (uint16_t i = 1, j = led_nums; i <= times; i++, j--) // i控制次数， j控制位置
 			{
 				// 正常移动阶段
 				data[(j - 1) / 8] |= 0x80 >> ((j - 1) % 8);
@@ -47,7 +48,6 @@ uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t
 				if (j == brick_nums + 1)
 				{
 					brick_nums += bits_lens;
-					printf("brick_nums = %d\n", brick_nums);
 					j = led_nums + 1; // for循环里j还会再-1
 				}
 			}
@@ -55,7 +55,7 @@ uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t
 		else
 		{
 			memset(data, 0xff, size);	//得全部置1才看得出效果
-			for (uint8_t i = 1, j = led_nums; i <= times; i++, j--) // i控制次数， j控制位置
+			for (uint16_t i = 1, j = led_nums; i <= times; i++, j--) // i控制次数， j控制位置
 			{
 				// 正常移动阶段
 				data[(j - 1) / 8] &= ~(0x80 >> ((j - 1) % 8));
@@ -90,7 +90,7 @@ uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t
         bool reset_flag;
 		if (Act == High)
 		{
-			for (uint8_t i = 1, j = 1; i <= times; i++, j++) // i控制次数， j控制位置
+			for (uint16_t i = 1, j = 1; i <= times; i++, j++) // i控制次数， j控制位置
 			{
                 reset_flag = false;
 				// 正常移动阶段
@@ -119,7 +119,7 @@ uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t
 		else
 		{
 			memset(data, 0xff, size);	//得全部置1才看得出效果
-			for (uint8_t i = 1, j = 1; i <= times; i++, j++) // i控制次数， j控制位置
+			for (uint16_t i = 1, j = 1; i <= times; i++, j++) // i控制次数， j控制位置
 			{
                 reset_flag = false;
 
@@ -155,19 +155,19 @@ uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t
 }
 int main(int argc, char const *argv[])
 {
-	uint8_t data[] = {0x00, 0x00};
+	uint8_t data[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 	/*每次当砖块叠满时，就退出*/
-	for(int i = 0; i < 255; i++)
+	for(int i = 0; i < 1024; i++)
 	{
-		// 叠砖函数示例 (大端模式)
-		bool ret = StackedBrickLamp(data, sizeof(data), 12, Right, i, 3, High);
+		// 叠砖函数示例 (小端模式)
+		bool ret = StackedBrickLamp(data, sizeof(data), 31, Left, i, 3, High);
 		if(ret == 0)
 			/*若想循环执行，则在此处置i为0*/
 			break;
 		// 打印二进制
-		printf("i = %2d, ret = %d, data = ", i, ret);
-		for (uint8_t i = 0; i < sizeof(data); i++)
+		printf("i = %3d, ret = %d, data = ", i, ret);
+		for (int i = 0; i < sizeof(data); i++)
 		{
 			// printf("%d ",data[i]);
 			printf2(data[i]);
