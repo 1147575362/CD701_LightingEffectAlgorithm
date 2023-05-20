@@ -26,8 +26,9 @@ enum Active
 /*
 	printf2:调试显示用，打印二进制
 		n:一个8b的数据
+		size:数组的大小，传sizeof即可
 */
-void printf2(char n);
+void printf2(uint8_t data[], uint8_t size);
 
 /*
 	RunningLamp:沿四个方向循环移动bits  (大端模式)
@@ -36,10 +37,10 @@ void printf2(char n);
         dir:移动方向
         times:移动次数
 */
-int RunningLamp(__UINT8_TYPE__ data[], uint8_t len, uint8_t dir, uint8_t times);
+bool RunningLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times);
 
 /*
-	FlowingLamp:沿四个方向循环移动bits  (大端模式)
+	FlowingLamp:沿四个方向循环移动bits  (小端模式)
 		data[]:数组元素个数范围，元素类型uint8_t
         size:数组的大小，传sizeof即可
 		led_nums:灯珠数量，要比数组的bit数小
@@ -48,17 +49,5 @@ int RunningLamp(__UINT8_TYPE__ data[], uint8_t len, uint8_t dir, uint8_t times);
         Act:High为高电平有效，low为低电平有效
 */
 uint8_t FlowingLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times, uint8_t Act);
-
-/*
-	StackedBrickLamp:沿左右两个方向叠砖式移动bits  (大端模式)
-		data[]:数组元素个数范围，元素类型uint8_t
-        size:数组的大小，传sizeof即可
-		led_nums:灯珠数量，需要比数组的bit数小
-        dir:移动方向
-        times:移动次数
-		bits_lens:以多长的bit串为单位移动
-        Act:High为高电平有效，low为低电平有效
-*/
-uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times, uint8_t bits_lens, uint8_t Act);
 
 #endif

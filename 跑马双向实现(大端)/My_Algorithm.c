@@ -221,14 +221,14 @@ bool RunningLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, ui
 	}
 }
 
-int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times, uint8_t Act)
+uint8_t FlowingLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times, uint8_t Act)
 {
 	if (data == NULL)
 		return 0;
 	if (led_nums > size * 8)
 		return 0;
 	//	mid用于控制close、diffuse模式的中间位置
-	int mid = led_nums % 2 ? led_nums / 2 + 1 : led_nums / 2;
+	uint8_t mid = led_nums % 2 ? led_nums / 2 + 1 : led_nums / 2;
 	switch (dir)
 	{
 	case Left:
@@ -241,12 +241,12 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					memset(data, 0, size);
 					j = led_nums - 1;
 				}
-				data[j / 8] |= 0x80 >> (j % 8);
+				data[j / 8] |= 0x01 << (j % 8);
 			}
 		}
 		else
 		{
-			memset(data, 0xff, size);							   // 将数组置1
+			memset(data, 0xff, size);								   // 将数组置1
 			for (uint8_t i = 0, j = led_nums - 1; i < times; i++, j--) // i控制次数，j控制位置
 			{
 				if (!(i % led_nums))
@@ -254,7 +254,7 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					memset(data, 0xff, size);
 					j = led_nums - 1;
 				}
-				data[j / 8] &= ~(0x80 >> (j % 8));
+				data[j / 8] &= ~(0x01 << (j % 8));
 			}
 		}
 		break;
@@ -268,7 +268,7 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					memset(data, 0, size);
 					j = 0;
 				}
-				data[j / 8] |= 0x80 >> (j % 8);
+				data[j / 8] |= 0x01 << (j % 8);
 			}
 		}
 		else
@@ -281,7 +281,7 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					memset(data, 0xff, size);
 					j = 0;
 				}
-				data[j / 8] &= ~(0x80 >> (j % 8));
+				data[j / 8] &= ~(0x01 << (j % 8));
 			}
 		}
 		break;
@@ -296,8 +296,8 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					j = 0;
 					k = led_nums - 1;
 				}
-				data[j / 8] |= 0x80 >> (j % 8);
-				data[k / 8] |= 0x80 >> (k % 8);
+				data[j / 8] |= 0x01 << (j % 8);
+				data[k / 8] |= 0x01 << (k % 8);
 			}
 		}
 		else
@@ -311,8 +311,8 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					j = 0;
 					k = led_nums - 1;
 				}
-				data[j / 8] &= ~(0x80 >> (j % 8));
-				data[k / 8] &= ~(0x80 >> (k % 8));
+				data[j / 8] &= ~(0x01 << (j % 8));
+				data[k / 8] &= ~(0x01 << (k % 8));
 			}
 		}
 		break;
@@ -329,8 +329,8 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					j = led_nums % 2 ? led_nums / 2 : led_nums / 2 - 1;
 					k = led_nums / 2;
 				}
-				data[j / 8] |= 0x80 >> (j % 8);
-				data[k / 8] |= 0x80 >> (k % 8);
+				data[j / 8] |= 0x01 << (j % 8);
+				data[k / 8] |= 0x01 << (k % 8);
 			}
 		}
 		else
@@ -344,8 +344,8 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					j = led_nums % 2 ? led_nums / 2 : led_nums / 2 - 1;
 					k = led_nums / 2;
 				}
-				data[j / 8] &= ~(0x80 >> (j % 8));
-				data[k / 8] &= ~(0x80 >> (k % 8));
+				data[j / 8] &= ~(0x01 << (j % 8));
+				data[k / 8] &= ~(0x01 << (k % 8));
 			}
 		}
 		break;
@@ -354,29 +354,30 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 	}
 }
 
+
 int main(int argc, char const *argv[])
 {
-	uint8_t data[] = {0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	 0x00, 0x00, 0x00, 0x00, 0x0f};
-	printf("data len = %d \n", sizeof(data));
+	uint8_t data[] = {0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff    ,0x80, 0x00, 0x00, 0x00, 0x01};
 
 	// 跑马函数示例
-	for(int i = 1; i <= 104; i++)
+	printf("t =   , data = ");
+	printf2(data, sizeof(data));
+
+	for (uint8_t t = 0 ; t < 100; t++)
 	{
-		RunningLamp(data, sizeof(data), 100, Left, 1);
-		printf("i = %3d, data = ", i);
+		RunningLamp(data, sizeof(data), 100, Right, 1);
+		printf("t = %3d, data = ", t);
 		printf2(data, sizeof(data));
 	}
 
 	// 流水函数示例
-	// for(int i = 1; i <= 50; i++)
+	//  FlowingLamp(data, sizeof(data), 15, Diffuse, 3, High);
+
+	//打印二进制
+	// printf("data = ");
+	// for (uint8_t i = 0; i < sizeof(data); i++)
 	// {
-	// 	FlowingLamp(data, sizeof(data), 100, Close, i, Low);
-	// 	printf("i = %3d, data = ", i);
-	// 	printf2(data, sizeof(data));
+	// 	printf2(data[i]);
 	// }
-
-
-	// 打印二进制
-
 	return 0;
 }

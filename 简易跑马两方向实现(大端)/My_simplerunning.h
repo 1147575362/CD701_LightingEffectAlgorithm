@@ -10,7 +10,7 @@
 // 灯光流动方向
 enum dir
 {
-	Left = 0,
+	Left = 1,
 	Right,
 	Close,
 	Diffuse

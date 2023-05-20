@@ -1,5 +1,5 @@
 #include "My_Algorithm.h"
-
+uint8_t gl_data[] = {0xff, 0xf0, 0x00, 0x00, 0x00, 0x00,	 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xf0};
 // 输出二进制 只能输出char类型 其他类型要修改
 void printf2(uint8_t data[], uint8_t size)
 {
@@ -16,6 +16,77 @@ void printf2(uint8_t data[], uint8_t size)
 	}
 	putchar('\n');
 }
+
+void copy_bits(char* dst, char* src, int dst_offset, int src_offset, int num_bits) {
+    int dst_byte = dst_offset / 8;  // 目标地址的字节偏移
+    int dst_bit = dst_offset % 8;   // 目标地址的bit偏移
+    int src_byte = src_offset / 8;  // 源地址的字节偏移
+    int src_bit = src_offset % 8;   // 源地址的bit偏移
+
+    // 先将目标地址的前面几个bit位清零
+    char mask = 0xff << (8 - dst_bit);
+     dst[dst_byte] &= mask;
+
+    // 逐bit拷贝数据
+    for (int i = 0; i < num_bits; i++) {
+        char bit = (src[src_byte] >> (7 - src_bit)) & 0x01;  // 取出源地址当前bit位的值
+        dst[dst_byte] |= bit << (7 - dst_bit);  // 将bit值写入目标地址的当前bit位
+
+        // 更新源地址和目标地址的偏移
+        src_bit++;
+        if (src_bit >= 8) {
+            src_bit = 0;
+            src_byte++;
+        }
+        dst_bit++;
+        if (dst_bit >= 8) {
+            dst_bit = 0;
+            dst_byte++;
+            // 清零下一个字节的前面几个bit位
+            mask = 0xff << (8 - dst_bit);
+            dst[dst_byte] &= mask;
+        }
+    }
+}
+
+uint64_t little_to_big(uint64_t num) {
+    uint8_t bytes[8];
+    for (int i = 0; i < 8; i++) {
+        bytes[i] = (uint8_t)(num >> (i * 8));
+    }
+
+    uint64_t result = 
+        ((uint64_t)bytes[0] << 56) |
+        ((uint64_t)bytes[1] << 48) |
+        ((uint64_t)bytes[2] << 40) |
+        ((uint64_t)bytes[3] << 32) |
+        ((uint64_t)bytes[4] << 24) |
+        ((uint64_t)bytes[5] << 16) |
+        ((uint64_t)bytes[6] << 8) |
+        ((uint64_t)bytes[7]);
+
+    return result;
+}
+
+uint64_t big_to_little(uint64_t num) {
+    uint8_t bytes[8];
+    for (int i = 0; i < 8; i++) {
+        bytes[i] = (uint8_t)(num >> ((7 - i) * 8));
+    }
+
+    uint64_t result = 
+        ((uint64_t)bytes[7] << 56) |
+        ((uint64_t)bytes[6] << 48) |
+        ((uint64_t)bytes[5] << 40) |
+        ((uint64_t)bytes[4] << 32) |
+        ((uint64_t)bytes[3] << 24) |
+        ((uint64_t)bytes[2] << 16) |
+        ((uint64_t)bytes[1] << 8) |
+        ((uint64_t)bytes[0]);
+
+    return result;
+}
+
 
 bool RunningLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times)
 {
@@ -144,6 +215,12 @@ bool RunningLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, ui
 		if (buff_a == 0 && buff_b == 0)
 			(led_nums <= 64) ? (buff_a = (uint64_t)0x80U << led_nums - 8) : (buff_a = (uint64_t)0x80U << 56);
 
+		buff_a = little_to_big(buff_a);
+		buff_b = little_to_big(buff_b);
+		
+		// buff_a = big_to_little(buff_a);
+		// buff_b = big_to_little(buff_b);
+
 		//开始移动
 		for (uint8_t i = 0; i < times; i++)
 		{
@@ -218,17 +295,39 @@ bool RunningLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, ui
 		// printf("buff_b = 0x%llx\n ", buff_b);
 	}
 	break;
+	case Close:
+	{
+		// 处理左半边
+		RunningLamp(gl_data, size, led_nums/2, Right, times);
+
+		if(led_nums % 8 == 0)
+			RunningLamp(gl_data, size, led_nums/2, Left, times);
+		else
+		{
+			//2.若右部分的最左边不与8对齐，则将其对齐至一个新数组内
+			uint8_t temp_array_size = size - led_nums/2;
+			uint8_t temp_data[7] = {0};
+			uint64_t temp_i64 = 0;
+			copy_bits(temp_data, gl_data, 0, led_nums/2, led_nums/2);
+			RunningLamp(temp_data, sizeof(temp_data), led_nums/2, Left, times);
+			copy_bits(gl_data, temp_data, led_nums/2, 0, led_nums/2);
+		}
+		break;
 	}
+	default:
+		break;
+	break;
+	}	// switch end
 }
 
-int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times, uint8_t Act)
+uint8_t FlowingLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times, uint8_t Act)
 {
 	if (data == NULL)
 		return 0;
 	if (led_nums > size * 8)
 		return 0;
 	//	mid用于控制close、diffuse模式的中间位置
-	int mid = led_nums % 2 ? led_nums / 2 + 1 : led_nums / 2;
+	uint8_t mid = led_nums % 2 ? led_nums / 2 + 1 : led_nums / 2;
 	switch (dir)
 	{
 	case Left:
@@ -241,12 +340,12 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					memset(data, 0, size);
 					j = led_nums - 1;
 				}
-				data[j / 8] |= 0x80 >> (j % 8);
+				data[j / 8] |= 0x01 << (j % 8);
 			}
 		}
 		else
 		{
-			memset(data, 0xff, size);							   // 将数组置1
+			memset(data, 0xff, size);								   // 将数组置1
 			for (uint8_t i = 0, j = led_nums - 1; i < times; i++, j--) // i控制次数，j控制位置
 			{
 				if (!(i % led_nums))
@@ -254,7 +353,7 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					memset(data, 0xff, size);
 					j = led_nums - 1;
 				}
-				data[j / 8] &= ~(0x80 >> (j % 8));
+				data[j / 8] &= ~(0x01 << (j % 8));
 			}
 		}
 		break;
@@ -268,7 +367,7 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					memset(data, 0, size);
 					j = 0;
 				}
-				data[j / 8] |= 0x80 >> (j % 8);
+				data[j / 8] |= 0x01 << (j % 8);
 			}
 		}
 		else
@@ -281,7 +380,7 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					memset(data, 0xff, size);
 					j = 0;
 				}
-				data[j / 8] &= ~(0x80 >> (j % 8));
+				data[j / 8] &= ~(0x01 << (j % 8));
 			}
 		}
 		break;
@@ -296,8 +395,8 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					j = 0;
 					k = led_nums - 1;
 				}
-				data[j / 8] |= 0x80 >> (j % 8);
-				data[k / 8] |= 0x80 >> (k % 8);
+				data[j / 8] |= 0x01 << (j % 8);
+				data[k / 8] |= 0x01 << (k % 8);
 			}
 		}
 		else
@@ -311,8 +410,8 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					j = 0;
 					k = led_nums - 1;
 				}
-				data[j / 8] &= ~(0x80 >> (j % 8));
-				data[k / 8] &= ~(0x80 >> (k % 8));
+				data[j / 8] &= ~(0x01 << (j % 8));
+				data[k / 8] &= ~(0x01 << (k % 8));
 			}
 		}
 		break;
@@ -329,8 +428,8 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					j = led_nums % 2 ? led_nums / 2 : led_nums / 2 - 1;
 					k = led_nums / 2;
 				}
-				data[j / 8] |= 0x80 >> (j % 8);
-				data[k / 8] |= 0x80 >> (k % 8);
+				data[j / 8] |= 0x01 << (j % 8);
+				data[k / 8] |= 0x01 << (k % 8);
 			}
 		}
 		else
@@ -344,8 +443,8 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 					j = led_nums % 2 ? led_nums / 2 : led_nums / 2 - 1;
 					k = led_nums / 2;
 				}
-				data[j / 8] &= ~(0x80 >> (j % 8));
-				data[k / 8] &= ~(0x80 >> (k % 8));
+				data[j / 8] &= ~(0x01 << (j % 8));
+				data[k / 8] &= ~(0x01 << (k % 8));
 			}
 		}
 		break;
@@ -354,29 +453,30 @@ int FlowingLamp(__UINT8_TYPE__ data[], uint8_t size, uint8_t led_nums, uint8_t d
 	}
 }
 
+
 int main(int argc, char const *argv[])
 {
-	uint8_t data[] = {0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	 0x00, 0x00, 0x00, 0x00, 0x0f};
-	printf("data len = %d \n", sizeof(data));
+
 
 	// 跑马函数示例
-	for(int i = 1; i <= 104; i++)
+	printf("t =    , data = ");
+	printf2(gl_data, sizeof(gl_data));
+
+	for (uint8_t t = 0 ; t < 100; t++)
 	{
-		RunningLamp(data, sizeof(data), 100, Left, 1);
-		printf("i = %3d, data = ", i);
-		printf2(data, sizeof(data));
+		RunningLamp(gl_data, sizeof(gl_data), 64, Right, 1);
+		printf("t = %3d, data = ", t);
+		printf2(gl_data, sizeof(gl_data));
 	}
 
 	// 流水函数示例
-	// for(int i = 1; i <= 50; i++)
+	//  FlowingLamp(data, sizeof(data), 15, Diffuse, 3, High);
+
+	//打印二进制
+	// printf("data = ");
+	// for (uint8_t i = 0; i < sizeof(data); i++)
 	// {
-	// 	FlowingLamp(data, sizeof(data), 100, Close, i, Low);
-	// 	printf("i = %3d, data = ", i);
-	// 	printf2(data, sizeof(data));
+	// 	printf2(data[i]);
 	// }
-
-
-	// 打印二进制
-
 	return 0;
 }

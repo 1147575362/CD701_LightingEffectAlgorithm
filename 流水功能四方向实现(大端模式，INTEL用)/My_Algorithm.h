@@ -26,17 +26,18 @@ enum Active
 /*
 	printf2:调试显示用，打印二进制
 		n:一个8b的数据
+		size:data的sizeof
 */
-void printf2(char n);
+void printf2(uint8_t data[], uint8_t size);
 
 /*
-	RunningLamp:沿四个方向循环移动bits
+	RunningLamp:沿四个方向循环移动bits  (小端模式)
 		data[]:数组元素个数范围1~13，元素类型uint8_t
         len:灯珠数量范围1~100
         dir:移动方向
         times:移动次数
 */
-int RunningLamp(__UINT8_TYPE__ data[], uint8_t len, uint8_t dir, uint8_t times);
+bool RunningLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint8_t times);
 
 /*
 	FlowingLamp:沿四个方向循环移动bits

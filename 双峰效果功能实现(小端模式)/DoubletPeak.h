@@ -16,7 +16,7 @@ void printf2(char n);
 
 /*
 	DoubletPeak:双峰灯效(小端)
-        data[]:数组元素个数>=6，元素类型uint8_t
+        data[]:数组元素个数>=6(因为灯珠数量为43)，元素类型uint8_t
         size:数组的大小，传sizeof即可
         times:移动次数
 */
