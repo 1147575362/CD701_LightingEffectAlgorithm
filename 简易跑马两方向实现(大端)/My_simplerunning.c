@@ -1,4 +1,4 @@
-#include "StackedBrickLamp.h"
+#include "My_simplerunning.h"
 
 // 仅用于调试 输出二进制 只能输出char类型 其他类型要修改
 void printf2(char n)
@@ -13,7 +13,7 @@ void printf2(char n)
 	printf("");
 }
 
-uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint16_t times, uint8_t bits_lens, uint8_t Act)
+uint8_t My_simplerunning(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint16_t times, uint8_t bits_lens, uint8_t Act)
 {
 	if (data == NULL)
 		return 0;
@@ -90,7 +90,7 @@ int main(int argc, char const *argv[])
 	for(int i = 0; i < 100; i++)
 	{
 		// 叠砖函数示例 (大端模式)
-		bool ret = StackedBrickLamp(data, sizeof(data), 100, Right, i, 5, High);
+		bool ret = My_simplerunning(data, sizeof(data), 100, Right, i, 5, High);
 		// if(ret == 0)
 		// 	/*若想循环执行，则在此处置i为0*/
 		// 	break;

@@ -1,5 +1,5 @@
-#ifndef __STACKEDBRICKLAMP_H__
-#define __STACKEDBRICKLAMP_H__
+#ifndef __MYSINMPLERUNNING_H__
+#define __MYSINMPLERUNNING_H__
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +30,7 @@ enum Active
 void printf2(char n);
 
 /*
-	StackedBrickLamp:沿左右两个方向叠砖式移动bits  (大端模式)
+	My_simplerunning:沿左右两个方向叠砖式移动bits  (大端模式)
 		data[]:数组元素个数范围，元素类型uint8_t
         size:数组的大小，传sizeof即可
 		led_nums:灯珠数量，需要比数组的bit数小
@@ -39,6 +39,6 @@ void printf2(char n);
 		bits_lens:以多长的bit串为单位移动
         Act:High为高电平有效，low为低电平有效
 */
-uint8_t StackedBrickLamp(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint16_t times, uint8_t bits_lens, uint8_t Act);
+uint8_t My_simplerunning(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint16_t times, uint8_t bits_lens, uint8_t Act);
 
 #endif
