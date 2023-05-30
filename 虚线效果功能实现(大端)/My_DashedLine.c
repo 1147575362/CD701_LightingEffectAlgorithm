@@ -240,11 +240,198 @@ uint16_t u16Swimming_mid(uint16_t x, uint8_t dir, uint8_t times)
     return x;
 }
 
+bool DashedLineMovement(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint16_t times)
+{
+    if (data == NULL)
+        return 0;
+    if (led_nums > size * 8)
+        return 0;
+    if (led_nums == 100)
+    {
+        if(dir == Left || dir == Right)
+        {
+            // return的是uint16_t类型的数据 用11位类型的数据接收 直接截断低11位
+            LedData.group.group_1 = u16Movement_odd(LedData.group.group_1, dir, times);
+            LedData.group.group_2 = u16Movement_even(LedData.group.group_2, dir, times);
+            LedData.group.group_3 = u16Movement_odd(LedData.group.group_3, dir, times);
+            LedData.group.group_4 = u16Movement_even(LedData.group.group_4, dir, times);
+            LedData.group.group_5 = u16Movement_odd(LedData.group.group_5, dir, times);
+            LedData.group.group_6 = u16Movement_even(LedData.group.group_6, dir, times);
+            LedData.group.group_7 = u16Movement_odd(LedData.group.group_7, dir, times);
+            LedData.group.group_8 = u16Movement_even(LedData.group.group_8, dir, times);
+            group_9_flag = 1;
+            LedData.group.group_9 = u16Movement_odd(LedData.group.group_9, dir, times); // 第9组有12颗灯 所以需要特殊处理以保持与其他组同步
+            group_9_flag = 0;
+        }
+        else if(dir == Close)
+        {
+            //左侧
+            LedData.group.group_1 = u16Movement_odd(LedData.group.group_1, Right, times);
+            LedData.group.group_2 = u16Movement_even(LedData.group.group_2, Right, times);
+            LedData.group.group_3 = u16Movement_odd(LedData.group.group_3, Right, times);
+            LedData.group.group_4 = u16Movement_even(LedData.group.group_4, Right, times);
+            //中间
+            LedData.group.group_5 = u16Movement_mid(LedData.group.group_5, Close, times);
+            //右侧
+            LedData.group.group_6 = u16Movement_even(LedData.group.group_6, Left, times);
+            LedData.group.group_7 = u16Movement_odd(LedData.group.group_7, Left, times);
+            LedData.group.group_8 = u16Movement_even(LedData.group.group_8, Left, times);
+            group_9_flag = 1;
+            LedData.group.group_9 = u16Movement_odd(LedData.group.group_9, Left, times); // 第9组有12颗灯 所以需要特殊处理以保持与其他组同步
+            group_9_flag = 0;
+        }
+        else if(dir == Diffuse)
+        {
+            //左侧
+            LedData.group.group_1 = u16Movement_odd(LedData.group.group_1, Left, times);
+            LedData.group.group_2 = u16Movement_even(LedData.group.group_2, Left, times);
+            LedData.group.group_3 = u16Movement_odd(LedData.group.group_3, Left, times);
+            LedData.group.group_4 = u16Movement_even(LedData.group.group_4, Left, times);
+            //中间
+            LedData.group.group_5 = u16Movement_mid(LedData.group.group_5, Diffuse, times);
+            //右侧
+            LedData.group.group_6 = u16Movement_even(LedData.group.group_6, Right, times);
+            LedData.group.group_7 = u16Movement_odd(LedData.group.group_7, Right, times);
+            LedData.group.group_8 = u16Movement_even(LedData.group.group_8, Right, times);
+            group_9_flag = 1;
+            LedData.group.group_9 = u16Movement_odd(LedData.group.group_9, Right, times); // 第9组有12颗灯 所以需要特殊处理以保持与其他组同步
+            group_9_flag = 0;
+        }
+        else;
+        // 联合体自动写入有bit位错位 现手动写回
+        data[0] = LedData.group.group_1 >> 3;
+        data[1] = (LedData.group.group_1 & 0x07) << 5;
+        data[1] |= LedData.group.group_2 >> 6;
+        data[2] = (LedData.group.group_2 & 0x3f) << 2;
+        data[2] |= LedData.group.group_3 >> 9;
+        data[3] = (LedData.group.group_3 & 0x1fe) >> 1;
+        data[4] = (LedData.group.group_3 & 0x01) << 7;
+        data[4] |= LedData.group.group_4 >> 4;
+        data[5] = (LedData.group.group_4 & 0x0f) << 4;
+        data[5] |= LedData.group.group_5 >> 7;
+        data[6] = (LedData.group.group_5 & 0x7f) << 1;
+        data[6] |= LedData.group.group_6 >> 10;
+        data[7] = (LedData.group.group_6 & 0x3fc) >> 2;
+        data[8] = (LedData.group.group_6 & 0x03) << 6;
+        data[8] |= LedData.group.group_7 >> 5;
+        data[9] = (LedData.group.group_7 & 0x1f) << 3;
+        data[9] |= LedData.group.group_8 >> 8;
+        data[10] = LedData.group.group_8 & 0xff;
+        data[11] = LedData.group.group_9 >> 4;
+        data[12] = (LedData.group.group_9 & 0x0f) << 4;
+    }
+}
+
+uint16_t u16Movement_odd(uint16_t x, uint8_t dir, uint8_t times)
+{
+ switch (dir)
+    {
+    case Left:  //  左←————右
+        if(group_9_flag == 0)
+        {
+            if(times <= 11)
+                for (uint8_t i = 0; i < times; i++)     //  点亮阶段
+                    x |= 0x01 << i;
+            else                                        //  熄灭阶段 这里应该是渐变熄灭 现直接灭灯处理
+                x = 0;
+        }
+        else
+        {
+            if(times <= 11)
+                for (uint8_t i = 0; i < times + 1; i++)     //  点亮阶段
+                    x |= 0x01 << i;
+            else                                        //  熄灭阶段 这里应该是渐变熄灭 现直接灭灯处理
+                x = 0;
+        }
+        break;
+
+    case Right: //  左————→右
+        if(group_9_flag == 0)
+        {
+            if(times <= 11)
+                for (uint8_t i = 0; i < times; i++)     //  点亮阶段
+                    x |= 0x400 >> i;
+            else                                        //  熄灭阶段 这里应该是渐变熄灭 现直接灭灯处理
+                x = 0;
+        }
+        else
+        {
+            if(times <= 11)
+                for (uint8_t i = 0; i < times + 1; i++)     //  点亮阶段
+                    x |= 0x800 >> i;
+            else                                        //  熄灭阶段 这里应该是渐变熄灭 现直接灭灯处理
+                x = 0;
+        }
+        break;
+    default:
+        break;
+    }
+    return x;
+}
+
+uint16_t u16Movement_even(uint16_t x, uint8_t dir, uint8_t times)
+{
+    switch (dir)
+    {
+    case Left:  //  左←————右
+        if(times >= 11)
+            for (uint8_t j = 0; j < times - 11; j++)        //  点亮阶段
+                x |= 0x01 << j;
+        else                                                //  熄灭阶段 这里应该是渐变熄灭 现直接灭灯处理
+           x = 0;
+        break;
+    case Right:
+        if(times >= 11)
+            for (uint8_t j = 0; j <times - 11; j++)         //  点亮阶段
+                x |= 0x400 >> j;
+        else                                                //  熄灭阶段 这里应该是渐变熄灭 现直接灭灯处理
+           x = 0;
+    default:
+        break;
+    }
+    return x;
+}
+
+uint16_t u16Movement_mid(uint16_t x, uint8_t dir, uint8_t times)
+{
+    switch (dir)
+    {
+    case Close:
+        for (uint8_t i = 0; i < times; i++)     //  两头点亮阶段
+        {
+            x |= 0x01 << i;
+            x |= 0x400 >> i;
+        }
+        if (times > 11)                        //  两头熄灭阶段
+        {
+            x = 0;
+        }
+        break;
+    case Diffuse:
+        if(times > 5)   //先等5个times 再进入流程
+        {
+            for (uint8_t i = 5; i < times; i++)     //  中间点亮阶段
+            {
+                x |= 0x01 << i;
+                x |= 0x400 >> i;
+            }
+            if(times >= 12)                             //  中间熄灭阶段
+            {
+                x = 0;
+            }
+        }
+        break;
+    default:
+        break;
+    }
+    return x;
+
+}
 int main(int argc, char const *argv[])
 {
     for (uint8_t i = 1; i < 23; i++)
     {
-        DashedLineSwimming(data, sizeof(data), 100, Right, i);
+        DashedLineSwimming(data, sizeof(data), 100, Diffuse, i);
         // // // 数组打印调试
         printf("i = %2d, data = ", i);
         printf2(data, sizeof(data));

@@ -81,6 +81,53 @@ uint16_t u16Swimming_odd(uint16_t x, uint8_t dir, uint8_t times);
 */
 uint16_t u16Swimming_even(uint16_t x, uint8_t dir, uint8_t times);
 
+
+/*
+	u16Swimming_mid:中间组虚线游动
+        x:u16类型的变量，用于存储11颗/12颗led的变化
+        dir:游动方向
+        times:次数，若led_nums传入100则是1~22之间循环，不到达23
+        @return:改变后的x
+*/
 uint16_t u16Swimming_mid(uint16_t x, uint8_t dir, uint8_t times);
+
+
+/*
+	DashedLineMovement:虚线平移
+		data:uint_8类型的数组
+		size:数组的大小，传sizeof即可
+        led_nums:传100或？？？
+        dir:游动方向
+        times:次数，若led_nums传入100则是1~22之间循环，不到达23
+*/
+bool DashedLineMovement(uint8_t data[], uint8_t size, uint8_t led_nums, uint8_t dir, uint16_t times);
+
+/*
+	u16Movement_odd:奇数组虚线平移
+        x:u16类型的变量，用于存储11颗/12颗led的变化
+        dir:游动方向
+        times:次数，若led_nums传入100则是1~22之间循环，不到达23
+        @return:改变后的x
+*/
+uint16_t u16Movement_odd(uint16_t x, uint8_t dir, uint8_t times);
+
+/*
+	u16Movement_even:偶数组虚线平移
+        x:u16类型的变量，用于存储11颗/12颗led的变化
+        dir:游动方向
+        times:次数，若led_nums传入100则是1~22之间循环，不到达23
+        @return:改变后的x
+*/
+uint16_t u16Movement_even(uint16_t x, uint8_t dir, uint8_t times);
+
+
+/*
+	u16Movement_mid:中间组虚线平移
+        x:u16类型的变量，用于存储11颗/12颗led的变化
+        dir:游动方向
+        times:次数，若led_nums传入100则是1~22之间循环，不到达23
+        @return:改变后的x
+*/
+uint16_t u16Movement_mid(uint16_t x, uint8_t dir, uint8_t times);
 
 #endif
