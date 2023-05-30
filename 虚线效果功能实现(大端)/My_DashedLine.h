@@ -81,4 +81,6 @@ uint16_t u16Swimming_odd(uint16_t x, uint8_t dir, uint8_t times);
 */
 uint16_t u16Swimming_even(uint16_t x, uint8_t dir, uint8_t times);
 
+uint16_t u16Swimming_mid(uint16_t x, uint8_t dir, uint8_t times);
+
 #endif
