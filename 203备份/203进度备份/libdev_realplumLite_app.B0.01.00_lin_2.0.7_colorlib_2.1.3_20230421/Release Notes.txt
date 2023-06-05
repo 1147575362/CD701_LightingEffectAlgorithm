@@ -1,0 +1,17 @@
+Release Notes
+=============
+RealplumProSDK
+Date : Feb, 2021
+
+III. Revision History
+===================
+The list is not complete and covers only major additions and fixes comparing to the previous release.
+RealplumPro SDK v0.0.0.2 2021-03-09
+** Major new features
+    *none
+** Major improvements and bug fixes
+     * [RPPSDK_BG-0001] - [VERSION] Fixed CLM_SetLedPNVolts() function issue when temperature is not 24C
+RealplumPro SDK v0.0.0.1 2021-02-20
+     first release
+
+

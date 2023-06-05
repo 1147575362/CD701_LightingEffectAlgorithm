@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<optionMenuItem>
+  <tag>realplumLite</tag>
+  <display>IndieSemi realplumLite</display>
+  <data>$CUR_DIR$\realplumLite.i79</data>
+</optionMenuItem>

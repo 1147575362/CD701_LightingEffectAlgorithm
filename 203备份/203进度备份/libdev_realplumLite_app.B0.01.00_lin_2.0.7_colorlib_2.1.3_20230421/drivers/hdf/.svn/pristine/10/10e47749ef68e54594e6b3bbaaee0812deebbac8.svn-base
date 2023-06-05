@@ -1,0 +1,41 @@
+/**
+ * @copyright 2017 indie Semiconductor
+ * 
+ * This file is proprietary to indie Semiconductor.
+ * All rights reserved. Reproduction or distribution, in whole
+ * or in part, is forbidden except by express written permission
+ * of indie Semiconductor.
+ * 
+ * @file wdt1_sfr.h
+ */
+
+#ifndef __WDT1_SFR_H__
+#define __WDT1_SFR_H__
+
+/**
+ * @brief A structure to represent Special Function Registers for WDT1.
+ */
+typedef struct {
+
+   union {
+      struct {
+         uint32_t ENA     :  1; /*!< Enable */
+         uint32_t RSTEN   :  1; /*!< Reset enable */
+         uint32_t RSTFLAG :  1; /*!< Reset flag */
+         uint32_t PRESET  :  2;
+         uint32_t        : 27; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } CFG;
+
+   uint32_t KEY; /*<! Key */
+
+} WDT1_SFRS_t;
+
+/**
+ * @brief The starting address of WDT1 SFRS.
+ */
+#define WDT1_SFRS ((__IO WDT1_SFRS_t *)0x50020018)
+
+#endif /* end of __WDT1_SFR_H__ section */
+

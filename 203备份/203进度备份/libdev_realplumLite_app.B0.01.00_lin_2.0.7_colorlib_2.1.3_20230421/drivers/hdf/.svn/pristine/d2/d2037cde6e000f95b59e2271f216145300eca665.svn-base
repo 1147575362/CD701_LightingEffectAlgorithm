@@ -1,0 +1,45 @@
+/**
+ * @copyright 2017 indie Semiconductor
+ * 
+ * This file is proprietary to indie Semiconductor.
+ * All rights reserved. Reproduction or distribution, in whole
+ * or in part, is forbidden except by express written permission
+ * of indie Semiconductor.
+ * 
+ * @file wdta_sfr.h
+ */
+
+#ifndef __WDTA_SFR_H__
+#define __WDTA_SFR_H__
+
+/**
+ * @brief A structure to represent Special Function Registers for WDTA.
+ */
+typedef struct {
+
+   union {
+      struct {
+         uint32_t           :  1; /*    (reserved) */
+         uint32_t RUNNING    :  1; /*!< Running status */
+         uint32_t           :  6; /*    (reserved) */
+         uint32_t TIMEOUTSEL :  2; /*!< Timeout select */
+         uint32_t           : 22; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } CTRL;
+
+   uint32_t STOP; /*<! Stop */
+
+   uint32_t CLEAR; /*<! Clear */
+
+   uint32_t CNTVAL;
+
+} WDTA_SFRS_t;
+
+/**
+ * @brief The starting address of WDTA SFRS.
+ */
+#define WDTA_SFRS ((__IO WDTA_SFRS_t *)0x50010300)
+
+#endif /* end of __WDTA_SFR_H__ section */
+

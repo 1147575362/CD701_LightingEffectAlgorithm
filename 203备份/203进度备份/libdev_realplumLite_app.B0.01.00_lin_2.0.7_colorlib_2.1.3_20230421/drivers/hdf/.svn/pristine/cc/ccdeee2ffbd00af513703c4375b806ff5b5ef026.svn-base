@@ -1,0 +1,58 @@
+/**
+ * @copyright 2017 indie Semiconductor
+ * 
+ * This file is proprietary to indie Semiconductor.
+ * All rights reserved. Reproduction or distribution, in whole
+ * or in part, is forbidden except by express written permission
+ * of indie Semiconductor.
+ * 
+ * @file wica_sfr.h
+ */
+
+#ifndef __WICA_SFR_H__
+#define __WICA_SFR_H__
+
+/**
+ * @brief A structure to represent Special Function Registers for WICA.
+ */
+typedef struct {
+
+   union {
+      struct {
+         uint32_t LINENA      :  1; /*!< LIN Wakeup Enable */
+         uint32_t GPIOENA     :  1; /*!< GPIO Wakeup Enable */
+         uint32_t TIMERENA    :  1; /*!< Wakeup Timer Enable */
+         uint32_t            :  1; /*    (reserved) */
+         uint32_t TIMERTAPSEL :  4; /*!< WakeUp Timer Tap Select */
+         uint32_t LINIRQENA   :  1; /*!< LIN Wakeup Interrupt Enable */
+         uint32_t GPIOIRQENA  :  1; /*!< GPIO Wakeup Interrupt Enable */
+         uint32_t TIMERIRQENA :  1; /*!< Timer Wakeup Interrupt Enable */
+         uint32_t            :  1; /*    (reserved) */
+         uint32_t LINIRQCLR   :  1; /*!< clear the wulin_irq */
+         uint32_t GPIOIRQCLR  :  1; /*!< clear the wugpio_irq */
+         uint32_t TIMERIRQCLR :  1; /*!< clear the wutimer_irq */
+         uint32_t            : 17; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } CTRL;
+
+   union {
+      struct {
+         uint32_t LIN      :  1; /*!< LIN Wakeup Status */
+         uint32_t GPIO     :  1; /*!< GPIO Wakeup Status */
+         uint32_t TIMER    :  1; /*!< Wakeup Timer Status */
+         uint32_t         : 13; /*    (reserved) */
+         uint32_t TIMERCNT : 16; /*!< Wakeup Timer Counter Value */
+      };
+      uint32_t WORD;
+   } STATUS;
+
+} WICA_SFRS_t;
+
+/**
+ * @brief The starting address of WICA SFRS.
+ */
+#define WICA_SFRS ((__IO WICA_SFRS_t *)0x50010100)
+
+#endif /* end of __WICA_SFR_H__ section */
+

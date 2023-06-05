@@ -1,0 +1,61 @@
+/**
+ * @copyright 2017 indie Semiconductor
+ * 
+ * This file is proprietary to indie Semiconductor.
+ * All rights reserved. Reproduction or distribution, in whole
+ * or in part, is forbidden except by express written permission
+ * of indie Semiconductor.
+ * 
+ * @file gpio_sfr.h
+ */
+
+#ifndef __GPIO_SFR_H__
+#define __GPIO_SFR_H__
+
+/**
+ * @brief A structure to represent Special Function Registers for GPIO.
+ */
+typedef struct {
+
+   uint8_t DATA[256 * 4];
+   uint32_t RESERVED0[768];
+
+   union {
+      struct {
+         uint32_t GPADIR0    :  1; /*!< GPIO1 PIN output enable */
+         uint32_t GPAIE0     :  1; /*!< GPIO1 PIN interrupt mask */
+         uint32_t GPARE0     :  1; /*!< GPIO1 PIN rising edge enable */
+         uint32_t GPAFE0     :  1; /*!< GPIO1 PIN falling edge enable */
+         uint32_t GPACLR0    :  1; /*!< GPIO1 PIN interrupt clear */
+         uint32_t GPAACTDET0 :  1; /*!< GPIO1 PIN activity interrupt */
+         uint32_t GPAHWSYNC0 :  1; /*!< GPIO1 PIN hardware synchronization enable */
+         uint32_t           :  1; /*    (reserved) */
+         uint32_t GPADIR1    :  1; /*!< GPIO2 PIN output enable */
+         uint32_t GPAIE1     :  1; /*!< GPIO2 PIN interrupt mask */
+         uint32_t GPARE1     :  1; /*!< GPIO2 PIN rising edge enable */
+         uint32_t GPAFE1     :  1; /*!< GPIO2 PIN falling edge enable */
+         uint32_t GPACLR1    :  1; /*!< GPIO2 PIN interrupt clear */
+         uint32_t GPAACTDET1 :  1; /*!< GPIO2 PIN activity interrupt */
+         uint32_t GPAHWSYNC1 :  1; /*!< GPIO2 PIN hardware synchronization enable */
+         uint32_t           :  1; /*    (reserved) */
+         uint32_t GPADIR2    :  1; /*!< NOT USED. SEE IOCTRL RxLIN_ena & TxLIN_ena */
+         uint32_t GPAIE2     :  1; /*!< LIN PIN interrupt mask */
+         uint32_t GPARE2     :  1; /*!< LIN PIN rising edge enable */
+         uint32_t GPAFE2     :  1; /*!< LIN PIN falling edge enable */
+         uint32_t GPACLR2    :  1; /*!< LIN PIN interrupt clear */
+         uint32_t GPAACTDET2 :  1; /*!< LIN PIN activity interrupt */
+         uint32_t GPAHWSYNC2 :  1; /*!< LIN PIN hardware synchronization enable */
+         uint32_t           :  9; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } GPAP03;
+
+} GPIO_SFRS_t;
+
+/**
+ * @brief The starting address of GPIO SFRS.
+ */
+#define GPIO_SFRS ((__IO GPIO_SFRS_t *)0x50018000)
+
+#endif /* end of __GPIO_SFR_H__ section */
+

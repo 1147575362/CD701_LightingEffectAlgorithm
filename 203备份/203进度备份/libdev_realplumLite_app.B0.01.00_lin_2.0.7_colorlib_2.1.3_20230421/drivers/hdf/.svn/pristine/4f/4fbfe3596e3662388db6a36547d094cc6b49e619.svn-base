@@ -1,0 +1,113 @@
+/**
+ * @copyright 2017 indie Semiconductor
+ * 
+ * This file is proprietary to indie Semiconductor.
+ * All rights reserved. Reproduction or distribution, in whole
+ * or in part, is forbidden except by express written permission
+ * of indie Semiconductor.
+ * 
+ * @file ioctrla_sfr.h
+ */
+
+#ifndef __IOCTRLA_SFR_H__
+#define __IOCTRLA_SFR_H__
+
+/**
+ * @brief A structure to represent Special Function Registers for IOCTRLA.
+ */
+typedef struct {
+
+   union {
+      struct {
+         uint32_t HWMODE :  2; /*!< hardware mode */
+         uint32_t       :  1; /*    (reserved) */
+         uint32_t PUENA  :  1; /*!< pullup enable (active-low) */
+         uint32_t PDENA  :  1; /*!< pulldown enable */
+         uint32_t RDENA  :  1; /*!< read enable */
+         uint32_t       : 18; /*    (reserved) */
+         uint32_t MUXSEL :  7;
+         uint32_t       :  1; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } GPIO1;
+
+   union {
+      struct {
+         uint32_t HWMODE :  2; /*!< hardware mode */
+         uint32_t       :  1; /*    (reserved) */
+         uint32_t PUENA  :  1; /*!< pullup enable (active-low) */
+         uint32_t PDENA  :  1; /*!< pulldown enable */
+         uint32_t RDENA  :  1; /*!< read enable */
+         uint32_t       : 18; /*    (reserved) */
+         uint32_t MUXSEL :  7;
+         uint32_t       :  1; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } GPIO2;
+
+   union {
+      struct {
+         uint32_t HWMODE    :  1; /*!< LIN hardware mode */
+         uint32_t          :  2; /*    (reserved) */
+         uint32_t PU30K_ENA :  1; /*!< LIN 30K pullup enable */
+         uint32_t PU1K_ENA  :  1; /*!< LIN 1K  pullup enable */
+         uint32_t TXENA     :  1; /*!< LIN transmit enable */
+         uint32_t RXENA     :  1; /*!< LIN receive  enable */
+         uint32_t          :  1; /*    (reserved) */
+         uint32_t RXPOL     :  1; /*!< LIN receive  polarity */
+         uint32_t          :  3; /*    (reserved) */
+         uint32_t TXPOL     :  1; /*!< LIN transmit polarity */
+         uint32_t          : 19; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } LIN;
+
+   union {
+      struct {
+         uint32_t HWMODE :  1; /*!< LED hardware mode */
+         uint32_t       :  3; /*    (reserved) */
+         uint32_t DATA   :  1; /*!< LED Data Out */
+         uint32_t       : 27; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } LED;
+
+   union {
+      struct {
+         uint32_t GPIO1_SEL :  3;
+         uint32_t          :  1; /*    (reserved) */
+         uint32_t GPIO2_SEL :  2;
+         uint32_t          : 26; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } ANALOGTESTMUX;
+
+   union {
+      struct {
+         uint32_t ADCCONSEL            :  1; /*!< Hardware/Firmware Select */
+         uint32_t GPIOCONSEL           :  1; /*!< Hardware/Firmware Select */
+         uint32_t ADCSELSEL            :  1; /*!< Hardware/Firmware Select */
+         uint32_t TRMBGENASEL          :  1; /*!< Hardware/Firmware Select */
+         uint32_t TRMBGV1212CONNECTSEL :  1; /*!< Hardware/Firmware Select */
+         uint32_t TRMBGVBGCONNECTSEL   :  1; /*!< Hardware/Firmware Select */
+         uint32_t                     :  2; /*    (reserved) */
+         uint32_t ADCCONREG            :  8; /*!< Firmware Debug Value */
+         uint32_t GPIOCONREG           :  8; /*!< Firmware Debug Value */
+         uint32_t ADCSELREG            :  4; /*!< Firmware Debug Value */
+         uint32_t TRMBGENAREG          :  1; /*!< Firmware Debug Value */
+         uint32_t TRMBGV1212CONNECTREG :  1; /*!< Firmware Debug Value */
+         uint32_t TRMBGVBGCONNECTREG   :  1; /*!< Firmware Debug Value */
+         uint32_t                     :  1; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } ANALOGTESTMUXOVERRIDE;
+
+} IOCTRLA_SFRS_t;
+
+/**
+ * @brief The starting address of IOCTRLA SFRS.
+ */
+#define IOCTRLA_SFRS ((__IO IOCTRLA_SFRS_t *)0x50011000)
+
+#endif /* end of __IOCTRLA_SFR_H__ section */
+

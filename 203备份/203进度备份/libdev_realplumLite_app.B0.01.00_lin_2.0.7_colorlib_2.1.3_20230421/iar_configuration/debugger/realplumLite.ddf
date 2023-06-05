@@ -1,0 +1,25 @@
+
+;; Architecture extensions
+#include weak "..\ARM\ARMv6-M-SYST.ddf"
+
+;; Memory information ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Used to define address zones within the ARM address space (Memory).
+;;
+;;   Name      may be almost anything
+;;   AdrSpace  must be Memory
+;;   StartAdr  start of memory block
+;;   EndAdr    end of memory block
+;;   AccType   type of access, read-only (R), read-write (RW) or SFR (W)
+
+[Memory]
+;;         Name             AdrSpace    StartAdr    EndAdr      AccType   Width
+Memory =  SystemSFR        Memory      0x50000000  0x5000002C  RW  
+Memory =  Flash            Memory      0x00000000  0x0000FFFF  R  
+Memory =  RAM              Memory      0x20000000  0x20004000  RW 
+
+TrustedRanges = true
+UseSfrFilter = true
+
+[SfrInclude]
+File = realplumLite.svd

@@ -1,0 +1,13 @@
+"C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\bin\armproc.dll" 
+
+"C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\bin\armjlink2.dll" 
+
+"D:\Project\General\realplum\SDK\Project\libdev.realplum.B0.00.04.00.0000_stack\Release\Exe\Realplum.out" 
+
+--plugin="C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\bin\armbat.dll" 
+
+--flash_loader="C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\config\flashloader\IndieSemi\FlashLoader_Realplum.board" 
+
+
+
+

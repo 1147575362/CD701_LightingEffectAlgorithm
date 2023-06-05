@@ -1,0 +1,116 @@
+/**
+ * @copyright 2017 indie Semiconductor
+ * 
+ * This file is proprietary to indie Semiconductor.
+ * All rights reserved. Reproduction or distribution, in whole
+ * or in part, is forbidden except by express written permission
+ * of indie Semiconductor.
+ * 
+ * @file crga_sfr.h
+ */
+
+#ifndef __CRGA_SFR_H__
+#define __CRGA_SFR_H__
+
+/**
+ * @brief A structure to represent Special Function Registers for CRGA.
+ */
+typedef struct {
+
+   uint32_t LFRCSTS:  1;
+   uint32_t        : 31; /*    (reserved) */
+
+   union {
+      struct {
+         uint32_t HFRCENA   :  1; /*!< Fast oscillator enable */
+         uint32_t HFRCSTS   :  1; /*!< Fast oscillator status */
+         uint32_t          :  6; /*    (reserved) */
+         uint32_t SYSCLKSEL :  1; /*!< Clock select */
+         uint32_t          :  7; /*    (reserved) */
+         uint32_t DIVSYSCLK :  2; /*!< Clock div select */
+         uint32_t          : 14; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } SYSCLKCTRL;
+
+   union {
+      struct {
+         uint32_t PORFLAG       :  1; /*!< Power on reset flag */
+         uint32_t              :  1; /*    (reserved) */
+         uint32_t BOR3V3FLAG    :  1; /*!< BOR 3v3 flag */
+         uint32_t BOR2V6FLAG    :  1; /*!< BOR 2v6 flag */
+         uint32_t BOR1V8FLAG    :  1; /*!< BOR 1v8 flag */
+         uint32_t WDTFLAG       :  1; /*!< Watchdog bark flag */
+         uint32_t              :  2; /*    (reserved) */
+         uint32_t PORFLAGCLR    :  1; /*!< POR flag clear */
+         uint32_t              :  1; /*    (reserved) */
+         uint32_t BOR3V3FLAGCLR :  1; /*!< BOR 3v3 clear */
+         uint32_t BOR2V6FLAGCLR :  1; /*!< BOR 2v6 clear */
+         uint32_t BOR1V8FLAGCLR :  1; /*!< BOR 1v8 clear */
+         uint32_t WDTFLAGCLR    :  1; /*!< WDT flag clear */
+         uint32_t              :  2; /*    (reserved) */
+         uint32_t HARDRSTREQ    :  1; /*!< Hard reset request */
+         uint32_t              :  7; /*    (reserved) */
+         uint32_t SOFTRSTREQ    :  1; /*!< Soft reset request */
+         uint32_t              :  7; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } RESETCTRL;
+
+   union {
+      struct {
+         uint32_t VDD3V3 :  2; /*!< BOR 3v3 action */
+         uint32_t VDD2V6 :  2; /*!< BOR 2v6 action */
+         uint32_t VDD1V8 :  2; /*!< BOR 1v8 action */
+         uint32_t       : 26; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } BORACTION;
+
+   union {
+      struct {
+         uint32_t BOR3V3THRESH       :  4; /*!< BOR 3v3 threshold */
+         uint32_t                   :  4; /*    (reserved) */
+         uint32_t BOR2V6THRESH       :  4; /*!< BOR 2v6 threshold */
+         uint32_t                   :  4; /*    (reserved) */
+         uint32_t BOR1V8THRESH       :  4; /*!< BOR 1v8 threshold */
+         uint32_t                   :  4; /*    (reserved) */
+         uint32_t BORBIASOVERRIDEENA :  1; /*!< BOR bias override bit */
+         uint32_t                   :  3; /*    (reserved) */
+         uint32_t BORBIASOVERRIDESEL :  1; /*!< BOR bias override select */
+         uint32_t                   :  3; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } BORCONFIG;
+
+   uint32_t WDTACTION:  1;
+   uint32_t          : 31; /*    (reserved) */
+
+   uint32_t KILLLFRC:  1;
+   uint32_t         : 31; /*    (reserved) */
+
+   union {
+      struct {
+         uint32_t PMUCPSEL      :  1; /*!< PMU charge pump select */
+         uint32_t PMUCPREG      :  1; /*!< PMU charge pump override register */
+         uint32_t              :  2; /*    (reserved) */
+         uint32_t PMUCPDIVSEL   :  3; /*!< PMU charge pump divider select */
+         uint32_t              :  9; /*    (reserved) */
+         uint32_t TXLINCPSEL    :  1; /*!< TXLIN charge pump select */
+         uint32_t TXLINCPREG    :  1; /*!< TXLIN charge pump override register */
+         uint32_t              :  2; /*    (reserved) */
+         uint32_t TXLINCPDIVSEL :  3; /*!< TxLIN charge pump divider select */
+         uint32_t              :  9; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } CPCLKCTRL;
+
+} CRGA_SFRS_t;
+
+/**
+ * @brief The starting address of CRGA SFRS.
+ */
+#define CRGA_SFRS ((__IO CRGA_SFRS_t *)0x50000000)
+
+#endif /* end of __CRGA_SFR_H__ section */
+

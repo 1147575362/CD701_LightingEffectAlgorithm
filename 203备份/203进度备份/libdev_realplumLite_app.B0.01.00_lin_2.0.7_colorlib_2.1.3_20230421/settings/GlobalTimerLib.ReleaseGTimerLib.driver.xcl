@@ -1,0 +1,15 @@
+"--endian=little" 
+
+"--cpu=Cortex-M0" 
+
+"--fpu=None" 
+
+"--semihosting=none" 
+
+"--device=Realplum" 
+
+"--multicore_nr_of_cores=1" 
+
+
+
+

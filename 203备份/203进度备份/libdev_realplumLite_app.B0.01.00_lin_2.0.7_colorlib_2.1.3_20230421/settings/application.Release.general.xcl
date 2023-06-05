@@ -1,0 +1,13 @@
+"E:\IARold\arm\bin\armproc.dll" 
+
+"E:\IARold\arm\bin\armjlink2.dll" 
+
+"C:\Users\Administrator\Desktop\DailyDoc\6.1doc\203Project\libdev_realplumLite_app.B0.01.00_lin_2.0.7_colorlib_2.1.3_20230421\libdev_realplumLite_app.B0.01.00_lin_2.0.7_colorlib_2.1.3_20230421\Release\Exe\realplumPro_app.out" 
+
+--plugin="E:\IARold\arm\bin\armbat.dll" 
+
+--flash_loader="E:\IARold\arm\config\flashloader\IndieSemi\FlashLoader_realplumLite.board" 
+
+
+
+

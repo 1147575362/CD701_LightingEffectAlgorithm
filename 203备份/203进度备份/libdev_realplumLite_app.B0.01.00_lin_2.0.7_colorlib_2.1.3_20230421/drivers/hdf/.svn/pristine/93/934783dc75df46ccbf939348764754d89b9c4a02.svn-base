@@ -1,0 +1,33 @@
+/**
+ * @copyright 2017 indie Semiconductor
+ * 
+ * This file is proprietary to indie Semiconductor.
+ * All rights reserved. Reproduction or distribution, in whole
+ * or in part, is forbidden except by express written permission
+ * of indie Semiconductor.
+ * 
+ * @file timer0_sfr.h
+ */
+
+#ifndef __TIMER0_SFR_H__
+#define __TIMER0_SFR_H__
+
+/**
+ * @brief A structure to represent Special Function Registers for TIMER0.
+ */
+typedef struct {
+
+   uint32_t COUNT; /*<! Count */
+
+   uint32_t ENA:  1;
+   uint32_t    : 31; /*    (reserved) */
+
+} TIMER0_SFRS_t;
+
+/**
+ * @brief The starting address of TIMER0 SFRS.
+ */
+#define TIMER0_SFRS ((__IO TIMER0_SFRS_t *)0x50020000)
+
+#endif /* end of __TIMER0_SFR_H__ section */
+

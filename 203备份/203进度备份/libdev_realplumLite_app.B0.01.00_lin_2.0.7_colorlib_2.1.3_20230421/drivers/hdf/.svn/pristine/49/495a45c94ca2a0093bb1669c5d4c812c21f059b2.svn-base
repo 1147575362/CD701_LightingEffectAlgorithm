@@ -1,0 +1,135 @@
+/**
+ * @copyright 2017 indie Semiconductor
+ * 
+ * This file is proprietary to indie Semiconductor.
+ * All rights reserved. Reproduction or distribution, in whole
+ * or in part, is forbidden except by express written permission
+ * of indie Semiconductor.
+ * 
+ * @file lins_sfr.h
+ */
+
+#ifndef __LINS_SFR_H__
+#define __LINS_SFR_H__
+
+/**
+ * @brief A structure to represent Special Function Registers for LINS.
+ */
+typedef struct {
+
+    union {
+        struct {
+            uint32_t DATABUF1:  8;
+            uint32_t         : 24; /*    (reserved) */
+        
+            uint32_t DATABUF2:  8;
+            uint32_t         : 24; /*    (reserved) */
+        
+            uint32_t DATABUF3:  8;
+            uint32_t         : 24; /*    (reserved) */
+        
+            uint32_t DATABUF4:  8;
+            uint32_t         : 24; /*    (reserved) */
+        
+            uint32_t DATABUF5:  8;
+            uint32_t         : 24; /*    (reserved) */
+        
+            uint32_t DATABUF6:  8;
+            uint32_t         : 24; /*    (reserved) */
+        
+            uint32_t DATABUF7:  8;
+            uint32_t         : 24; /*    (reserved) */
+        
+            uint32_t DATABUF8:  8;
+            uint32_t         : 24; /*    (reserved) */
+        } BYTE;
+        struct {
+            uint32_t DATABUF:  8;
+            uint32_t         : 24; /*    (reserved) */
+        } ARRAY[8];
+    } DATA;
+   union {
+      struct {
+         uint32_t          :  1; /*    (reserved) */
+         uint32_t WAKEUPREQ :  1; /*!< WakeUp Request */
+         uint32_t RSTERR    :  1; /*!< Reset Error */
+         uint32_t RSTINT    :  1; /*!< Reset interrupt */
+         uint32_t DATAACK   :  1; /*!< Data Acknowledgement */
+         uint32_t TRANSMIT  :  1; /*!< Transmit Operation */
+         uint32_t SLEEP     :  1; /*!< Sleep Request */
+         uint32_t STOP      :  1; /*!< Stop Register */
+         uint32_t          : 24; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } CTRL;
+
+   union {
+      struct {
+         uint32_t COMPLETE       :  1;
+         uint32_t WAKEUP         :  1;
+         uint32_t ERROR          :  1; /*!< Lin Error */
+         uint32_t INTR           :  1; /*!< Interupt Request */
+         uint32_t DATAREQ        :  1; /*!< Data Request */
+         uint32_t ABORTED        :  1;
+         uint32_t BUSIDLETIMEOUT :  1; /*!< BUS Idle Timeout */
+         uint32_t ACTIVE         :  1; /*!< Lin Bus Active */
+         uint32_t               : 24; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } STATUS;
+
+   union {
+      struct {
+         uint32_t BITMON  :  1; /*!< Bit Error */
+         uint32_t CHK     :  1; /*!< Checksum Error */
+         uint32_t TIMEOUT :  1; /*!< Timeout Error */
+         uint32_t PARITY  :  1; /*!< Parity Error */
+         uint32_t        : 28; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } ERROR;
+
+   union {
+      struct {
+         uint32_t LENGTH :  4; /*!< Data Length */
+         uint32_t       :  3; /*    (reserved) */
+         uint32_t ENHCHK :  1; /*!< Enhancement Check */
+         uint32_t       : 24; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } DL;
+
+   uint32_t BTDIV07:  8;
+   uint32_t        : 24; /*    (reserved) */
+
+   union {
+      struct {
+         uint32_t BTDIV8 :  1; /*!< Bt Div Most Significant bit */
+         uint32_t       :  5; /*    (reserved) */
+         uint32_t PRESCL :  2; /*!< Prescaler Register */
+         uint32_t       : 24; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } BITTIME;
+
+   uint32_t ID:  6;
+   uint32_t   : 26; /*    (reserved) */
+
+   union {
+      struct {
+         uint32_t WUPREPEAT   :  2; /*!< wakeup repeat time */
+         uint32_t BUSINACTIVE :  2; /*!< Bus Inactivity Time */
+         uint32_t            : 28; /*    (reserved) */
+      };
+      uint32_t WORD;
+   } BUSTIME;
+
+} LINS_SFRS_t;
+
+/**
+ * @brief The starting address of LINS SFRS.
+ */
+#define LINS_SFRS ((__IO LINS_SFRS_t *)0x50010700)
+
+#endif /* end of __LINS_SFR_H__ section */
+

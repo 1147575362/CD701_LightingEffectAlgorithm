@@ -1,0 +1,13 @@
+"C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\bin\armproc.dll" 
+
+"C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\bin\armjlink2.dll" 
+
+"D:\Project\General\chuanliu\SDK\libdev_rugby_cl_app.00.00.00.00.0000\Release\Exe\rugby_cl_app.out" 
+
+--plugin="C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\bin\armbat.dll" 
+
+--flash_loader="C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\config\flashloader\IndieSemi\FlashLoader_rugby_cl.board" 
+
+
+
+

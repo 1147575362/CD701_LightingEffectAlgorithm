@@ -1,0 +1,19 @@
+"--endian=little" 
+
+"--cpu=Cortex-M0" 
+
+"--fpu=None" 
+
+"-p" 
+
+"C:\Program Files\IAR Systems\Embedded Workbench 8.1\arm\CONFIG\debugger\IndieSemi\realplumLite.ddf" 
+
+"--semihosting=none" 
+
+"--device=realplumPro" 
+
+"--multicore_nr_of_cores=1" 
+
+
+
+

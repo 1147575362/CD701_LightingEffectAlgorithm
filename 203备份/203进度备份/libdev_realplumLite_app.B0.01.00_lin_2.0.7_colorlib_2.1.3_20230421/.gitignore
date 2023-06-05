@@ -1,0 +1,14 @@
+/Release/exe
+/Release/List
+/Release/Obj
+/Debug/exe
+/Debug/List
+/Debug/Obj
+/Function_Blocks/Releases/exe
+/Function_Blocks/Releases/List
+/Function_Blocks/Releases/Obj
+*.dep
+/settings/*.wsdt
+/settings/*.dbgdt
+/settings/*.dnx
+/.vscode/*.*
